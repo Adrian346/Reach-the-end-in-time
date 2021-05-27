@@ -6,18 +6,47 @@ class Estado {
     }
 }
 
-const maximoMovimientos = 5; 
+const maximoMovimientos = 10000; 
 
-const laberinto = [
-    [ '.', '.', '.', ],
-    [ '#', '.', '.', ],
-    [ '#', '.', '.', ],
-];
+// const laberinto = [
+//     [ '.', '.', '.', ],
+//     [ '#', '.', '.', ],
+//     [ '#', '.', '.', ],
+// ];
+
+
+const laberinto = new Array (
+    ".......................",
+    "##.....................",
+     "#.#..#.................",
+     ".....#.................",
+     "##...#.................",
+     "#.#....................",
+     ".......................",
+     "##.....................",
+     "#.#..#.................",
+     ".....#.................",
+     "##...#.................",
+     "#.#....................",
+     ".......................",
+     "##.....................",
+     "#.#..#.................",
+     ".....#.................",
+     "##...#.................",
+     "#.#....................",
+     ".......................",
+     "##.....................",
+     "#.#..#.................",
+     ".....#.................",
+     "##...#.................",
+     "#.#....................",
+);
 
 const visitado = new Array(laberinto.length);
 
+
 for(let i = 0; i < laberinto.length; i++){
-    visitado[i] = new Array(laberinto[0].length);
+    visitado[i] = new Array(laberinto[i].length);
 }
 
 const cola = new Array();
@@ -29,7 +58,7 @@ const adyacenteX = [ 0, 0, 1, -1 ];
 const adyacenteY = [ 1, -1, 0, 0 ];
 
 if(laberinto[0][0] === '.'){
-    const totalMovimientos = buscar();
+    const totalMovimientos =  buscar();
     if(totalMovimientos <= maximoMovimientos && totalMovimientos !== -1 ){
         console.log('Yes');
     } else {
@@ -39,26 +68,28 @@ if(laberinto[0][0] === '.'){
     console.log('No');
 }
 
+
 function buscar() {
 
     while( cola.length !== 0 ){
         const estadoActual = cola.shift();
+        
         if(estadoActual.x === (laberinto.length - 1) && estadoActual.y === (laberinto[0].length - 1) ){
             visitado[estadoActual.x][estadoActual.y] = true;
             return estadoActual.d;
         }
-        visitado[estadoActual.x][estadoActual.y] = true;
         for( let i = 0; i < 4; i++ ){
             const coordenadaX = adyacenteX[i] + estadoActual.x;
             const coordenadaY = adyacenteY[i] + estadoActual.y;
-    
+            
             if( coordenadaX >= 0 && coordenadaX < laberinto.length 
                 && coordenadaY >= 0 && coordenadaY < laberinto[0].length
-                && laberinto[coordenadaX][coordenadaY]!=='#'
-                && !visitado[coordenadaX][coordenadaY]
-            ){
-                const estadoAdyacente = new Estado(coordenadaX, coordenadaY, estadoActual.d + 1);
-                cola.push(estadoAdyacente);
+                && laberinto[coordenadaX][coordenadaY]!=='#' &&
+                !visitado[coordenadaX][coordenadaY]
+                ){
+                    const estadoAdyacente = new Estado(coordenadaX, coordenadaY, estadoActual.d + 1);
+                    cola.push(estadoAdyacente);
+                    visitado[estadoAdyacente.x][estadoAdyacente.y] = true;
             }
         }
     }
